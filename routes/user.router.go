@@ -10,11 +10,13 @@ import (
 
 func InitUserRoutes(db *gorm.DB, c *fiber.App) error {
 
-	getByIdRepo := adapters.NewGormGetByIDRepository(db)
-	getByIdService := services.NewGetByIdService(getByIdRepo)
-	getByIdHandler := handlers.NewHttpGetByIdHandler(getByIdService)
+	getUserRepo := adapters.NewGormGetUserRepository(db)
+	getUserService := services.NewGetUserService(getUserRepo)
+	getUserHandler := handlers.NewHttpGetUserHandler(getUserService)
 
 	groupRoute := c.Group("/api/v1/user")
-	groupRoute.Get("/:id", getByIdHandler.GetById)
+	groupRoute.Get("/", getUserHandler.Gets)
+	groupRoute.Get("/:id", getUserHandler.GetById)
+	groupRoute.Get("/:email/email", getUserHandler.GetByEmail)
 	return nil
 }
