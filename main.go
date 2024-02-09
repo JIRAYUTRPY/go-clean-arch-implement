@@ -7,6 +7,7 @@ import (
 	"strconv"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/jirayutrpy/server-go/v2/entities"
 	"github.com/jirayutrpy/server-go/v2/routes"
 	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
@@ -31,6 +32,7 @@ func SetUpRouter() *fiber.App{
 	routes.InitAuthRoutes(db, app)
 	routes.InitUserRoutes(db, app)
 	routes.InitServeRoutes(db, app)
+	routes.InitEventRoutes(db,app)
 	return app
 }
 
@@ -49,7 +51,7 @@ func SetUpdatabase() (*gorm.DB,error){
 		return db,errors.New("Failed to connect database")
 	}
 
-	if err := db.AutoMigrate(); err != nil{
+	if err := db.AutoMigrate(&entities.User{}, &entities.Serve{},&entities.Event{} ); err != nil{
 		return db,errors.New("Failed to migrate database")
 	}
 	return db, nil

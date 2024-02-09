@@ -18,5 +18,5 @@ func (h *HttpGetServeHandler) Gets(c *fiber.Ctx) error {
 	if err != nil {
 		return  c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"message": err.Error()})
 	}
-	return c.Status(fiber.StatusCreated).JSON(fiber.Map{"message": "Fetch serve success"})
+	return c.Status(fiber.StatusFound).JSON(fiber.Map{"message": "Fetch serve success"})
 }

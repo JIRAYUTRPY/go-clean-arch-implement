@@ -36,7 +36,6 @@ func (s *LoginService) Login(request interfaces.LoginRequest)(response interface
 		return response, errors.New("Password Invalid")
 	}
 	jwtSecretKey := os.Getenv("SECRET_KEY")
-	// jwtSecretKey := "TEST"
 	newToken := jwt.New(jwt.SigningMethodHS256)
 	claims := newToken.Claims.(jwt.MapClaims)
 	claims["id"] = dataWithPassword.ID

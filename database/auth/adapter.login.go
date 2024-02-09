@@ -18,7 +18,8 @@ func (r *GormLoginRepository) GetByEmail(value string) (data entities.User, err 
 	var dataFormDatabase entities.User
 	result := r.db.Where("email = ?",value).First(&dataFormDatabase)
 	if result.Error != nil {
-		return dataFormDatabase, result.Error
+		err = result.Error
+		return dataFormDatabase, err
 	}
 	return dataFormDatabase, nil
 }
