@@ -7,15 +7,15 @@ import (
 	services "github.com/jirayutrpy/server-go/v2/services/user"
 )
 
-type HttpGetHandler struct {
+type HttpGetUserHandler struct {
 	userUsecase services.GetUserUseCase
 }
 
-func NewHttpGetUserHandler(usecase services.GetUserUseCase) *HttpGetHandler{
-	return &HttpGetHandler{userUsecase: usecase}
+func NewHttpGetUserHandler(usecase services.GetUserUseCase) *HttpGetUserHandler{
+	return &HttpGetUserHandler{userUsecase: usecase}
 }
 
-func (h *HttpGetHandler) Gets(c *fiber.Ctx) error {
+func (h *HttpGetUserHandler) Gets(c *fiber.Ctx) error {
 	response, err := h.userUsecase.Gets()
 	if err != nil {
 		return  c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"message": err.Error()})
@@ -23,7 +23,7 @@ func (h *HttpGetHandler) Gets(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusCreated).JSON(fiber.Map{"message": "Fetch user success", "data": response})
 }
 
-func (h *HttpGetHandler) GetById(c *fiber.Ctx) error {
+func (h *HttpGetUserHandler) GetById(c *fiber.Ctx) error {
 	idString := c.Params("id")
 	id, err := strconv.Atoi(idString)
 	if  err != nil {
@@ -36,7 +36,7 @@ func (h *HttpGetHandler) GetById(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusCreated).JSON(fiber.Map{"message": "Fetch user success", "data": response})
 }
 
-func (h *HttpGetHandler) GetByEmail(c *fiber.Ctx) error {
+func (h *HttpGetUserHandler) GetByEmail(c *fiber.Ctx) error {
 	email := c.Params("email")
 	response, err := h.userUsecase.GetByEmail(email)
 	if err != nil {

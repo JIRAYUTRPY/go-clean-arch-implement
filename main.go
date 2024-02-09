@@ -3,6 +3,8 @@ package main
 import (
 	"errors"
 	"fmt"
+	"os"
+	"strconv"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/jirayutrpy/server-go/v2/routes"
@@ -12,11 +14,11 @@ import (
 )
 
 func main() {
-	app := SetUpRouter()
 	err := godotenv.Load()
 	if err != nil {
 		fmt.Print(err)
 	}
+	app := SetUpRouter()
 	app.Listen(":7777")
 }
 
@@ -28,17 +30,19 @@ func SetUpRouter() *fiber.App{
 	}
 	routes.InitAuthRoutes(db, app)
 	routes.InitUserRoutes(db, app)
+	routes.InitServeRoutes(db, app)
 	return app
 }
 
 func SetUpdatabase() (*gorm.DB,error){
-	const (
-		host = "localhost"
-		port = 5432
-		database = "fundamental_postgres"
-		username = "admin"
-		password = "admin_password"
-	)
+	host := os.Getenv("HOST")
+	port, err := strconv.Atoi(os.Getenv("PORT"))
+	if err != nil {
+		fmt.Print("Port is should be number")
+	}
+	database := os.Getenv("DATABASE")
+	username := os.Getenv("DB_USERNAME")
+	password := os.Getenv("DB_PASSWORD")
 	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable" ,host,port,username,password,database)
 	db, err := gorm.Open(postgres.Open(psqlInfo), &gorm.Config{})
 	if err != nil{
