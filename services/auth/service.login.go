@@ -2,6 +2,7 @@ package services
 
 import (
 	"errors"
+	"fmt"
 	"os"
 	"time"
 
@@ -40,6 +41,7 @@ func (s *LoginService) Login(request interfaces.LoginRequest)(response interface
 	claims := newToken.Claims.(jwt.MapClaims)
 	claims["id"] = dataWithPassword.ID
 	claims["exp"] = time.Now().Add(time.Hour * 72).Unix()
+	fmt.Println(time.Now().Add(time.Hour * 72).Unix())
 	finishToken, err := newToken.SignedString([]byte(jwtSecretKey))
 	if err != nil {
 		return response,err

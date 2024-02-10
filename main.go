@@ -7,6 +7,7 @@ import (
 	"strconv"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/jirayutrpy/server-go/v2/entities"
 	"github.com/jirayutrpy/server-go/v2/routes"
 	"github.com/joho/godotenv"
@@ -25,6 +26,7 @@ func main() {
 
 func SetUpRouter() *fiber.App{
 	app := fiber.New()
+	app.Use(cors.New())
 	db, err := SetUpdatabase();
 	if err != nil {
 		fmt.Print(err)

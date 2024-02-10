@@ -1,8 +1,6 @@
 package handlers
 
 import (
-	"time"
-
 	"github.com/gofiber/fiber/v2"
 	"github.com/jirayutrpy/server-go/v2/interfaces"
 	services "github.com/jirayutrpy/server-go/v2/services/auth"
@@ -25,11 +23,11 @@ func (h *HttpLoginHandler) Login(c *fiber.Ctx) error {
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"message": err.Error()})
 	}
-	c.Cookie(&fiber.Cookie{
-		Name: "access_token",
-		Value:  data.Token,
-		Expires: time.Now().Add(time.Hour * 72),
-		HTTPOnly: true,
-	})
-	return c.Status(fiber.StatusCreated).JSON(fiber.Map{"message": "Login successfully"})
+	// c.Cookie(&fiber.Cookie{
+	// 	Name: "access_token",
+	// 	Value:  data.Token,
+	// 	Expires: time.Now().Add(time.Hour * 72),
+	// 	HTTPOnly: true,
+	// })
+	return c.Status(fiber.StatusCreated).JSON(fiber.Map{"message": "Login successfully", "token": data.Token})
 }

@@ -1,8 +1,6 @@
 package adapters
 
 import (
-	"errors"
-
 	"github.com/jirayutrpy/server-go/v2/entities"
 	repositorys "github.com/jirayutrpy/server-go/v2/repositorys/serve"
 	"gorm.io/gorm"
@@ -18,21 +16,37 @@ func NewGormGetServeRepository(db *gorm.DB) repositorys.GetServeRepository{
 
 ///* Have to Implement
 func (r *GormGetServeRepository) Gets() (data []entities.Serve, err error){
-	return data, errors.New("Not yet implement at Gets Adapter")
+	var dataFormDatabase []entities.Serve
+	result := r.db.Limit(10).Find(&dataFormDatabase)
+	if result.Error != nil {
+		return data, result.Error
+	}
+	return dataFormDatabase,nil
 }
 
-///* Have to Implement
-func (r *GormGetServeRepository) GetByServeId(userId uint)(data entities.Serve, err error){
-	return data,errors.New("Not yet implement at GetByServeId Adapter")
+func (r *GormGetServeRepository) GetByServeId(id uint)(data entities.Serve, err error){
+	var dataFormDatabase entities.Serve
+	result := r.db.Where("id = ?", id).First(&dataFormDatabase)
+	if result.Error != nil {
+		return data,result.Error
+	}
+	return data,nil
+}
+func (r *GormGetServeRepository) GetByServeName(name string)(data []entities.Serve, err error){
+	var dataFormDatabase []entities.Serve
+	result := r.db.Where("name = ?", name).Limit(10).Find(&dataFormDatabase)
+	if result.Error != nil {
+		return data, result.Error
+	}
+	return dataFormDatabase,nil
 }
 
-///* Have to Implement
-func (r *GormGetServeRepository) GetByServeName(name string)(data entities.Serve, err error){
-	return data,errors.New("Not yet implement at GetByServeName Adapter")
-}
-
-///* Have to Implement
-func (r *GormGetServeRepository) GetByUserId(id uint)(data entities.Serve, err error){
-	return data,errors.New("Not yet implement at GetByUserId Adapter")
+func (r *GormGetServeRepository) GetByUserId(userId uint)(data []entities.Serve, err error){
+	var dataFormDatabase []entities.Serve
+	result := r.db.Where("user_id = ?", userId).Limit(10).Find(&dataFormDatabase)
+	if result.Error != nil {
+		return data, result.Error
+	}
+	return dataFormDatabase,nil
 }
 
