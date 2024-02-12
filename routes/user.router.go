@@ -14,6 +14,7 @@ func InitUserRoutes(db *gorm.DB, c *fiber.App) error {
 	getUserRepo := adapters.NewGormGetUserRepository(db)
 	getUserService := services.NewGetUserService(getUserRepo)
 	getUserHandler := handlers.NewHttpGetUserHandler(getUserService)
+	
 	groupRoute := c.Group("/api/v1/user")
 	groupRoute.Use(middlewares.HttpAuthorization)
 	groupRoute.Get("/", getUserHandler.Gets)

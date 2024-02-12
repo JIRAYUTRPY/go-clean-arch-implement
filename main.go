@@ -31,6 +31,7 @@ func SetUpRouter() *fiber.App{
 	if err != nil {
 		fmt.Print(err)
 	}
+	routes.InitNoauthRoutes(db, app)
 	routes.InitAuthRoutes(db, app)
 	routes.InitUserRoutes(db, app)
 	routes.InitServeRoutes(db, app)

@@ -13,7 +13,7 @@ import (
 )
 
 type LoginUseCase interface {
-	Login(request interfaces.LoginRequest) (response interfaces.LoginResponse,err error)
+	Login(request interfaces.LoginRequest) (response interfaces.LoginResponse ,userId uint ,err error)
 }
 
 type LoginService struct {
@@ -24,17 +24,17 @@ func NewLoginService(repo repositorys.LoginRepository) LoginUseCase{
 	return &LoginService{repo: repo}
 }
 
-func (s *LoginService) Login(request interfaces.LoginRequest)(response interfaces.LoginResponse,err error){
+func (s *LoginService) Login(request interfaces.LoginRequest)(response interfaces.LoginResponse ,userId uint ,err error){
 	dataWithPassword, err := s.repo.GetByEmail(request.Email)
 	if err != nil {
-		return response, err
+		return response, userId, err
 	}
 	err = bcrypt.CompareHashAndPassword(
 		[]byte(dataWithPassword.Password),
 		[]byte(request.Password),
 	)
 	if err != nil {
-		return response, errors.New("Password Invalid")
+		return response, userId, errors.New("Password Invalid")
 	}
 	jwtSecretKey := os.Getenv("SECRET_KEY")
 	newToken := jwt.New(jwt.SigningMethodHS256)
@@ -44,8 +44,8 @@ func (s *LoginService) Login(request interfaces.LoginRequest)(response interface
 	fmt.Println(time.Now().Add(time.Hour * 72).Unix())
 	finishToken, err := newToken.SignedString([]byte(jwtSecretKey))
 	if err != nil {
-		return response,err
+		return response, userId, err
 	}
 	response.Token = finishToken
-	return response, nil
+	return response, dataWithPassword.ID, nil
 }

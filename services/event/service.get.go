@@ -10,7 +10,7 @@ import (
 type GetEventUsecase interface{
 	Gets()(data entities.Event, err error)
 	GetById(id uint)(data entities.Event, err error)
-	GetByUserId(userId uint)(data entities.Event, err error)
+	GetByUserId(userId int)(data []entities.Event, err error)
 }
 
 type GetEventService struct {
@@ -28,6 +28,10 @@ func (s *GetEventService) Gets()(data entities.Event, err error){
 func (s *GetEventService) GetById(id uint)(data entities.Event, err error){
 	return data,errors.New("Not yet implement")
 }
-func (s *GetEventService) GetByUserId(userId uint)(data entities.Event, err error){
-	return data,errors.New("Not yet implement")
+func (s *GetEventService) GetByUserId(userId int)(data []entities.Event, err error){
+	reponse, err := s.repo.GetByUserId(userId)
+	if err != nil {
+		return data, err
+	}
+	return reponse,nil
 }

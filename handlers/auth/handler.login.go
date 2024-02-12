@@ -19,15 +19,9 @@ func (h *HttpLoginHandler) Login(c *fiber.Ctx) error {
 	if err := c.BodyParser(&loginInterface); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"message": err})
 	}
-	data, err := h.authUsecase.Login(loginInterface)
+	data, userId, err := h.authUsecase.Login(loginInterface)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"message": err.Error()})
 	}
-	// c.Cookie(&fiber.Cookie{
-	// 	Name: "access_token",
-	// 	Value:  data.Token,
-	// 	Expires: time.Now().Add(time.Hour * 72),
-	// 	HTTPOnly: true,
-	// })
-	return c.Status(fiber.StatusCreated).JSON(fiber.Map{"message": "Login successfully", "token": data.Token})
+	return c.Status(fiber.StatusCreated).JSON(fiber.Map{"message": "Login successfully", "token": data.Token, "user_id": userId})
 }

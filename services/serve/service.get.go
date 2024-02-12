@@ -9,8 +9,8 @@ import (
 
 type GetServeUseCase interface {
 	Gets() error
-	GetByUserId(id uint) error
-	GetByServeId(id uint) (data interfaces.ServeResponse, err error)
+	GetByUserId(id int) (data []interfaces.ServeResponse, err error)
+	GetByServeId(id int) (data interfaces.ServeResponse, err error)
 	GetByServeName(name string) error
 }
 type GetServeService struct {
@@ -25,7 +25,7 @@ func (s *GetServeService) Gets() error{
 	return errors.New("Not yet implement at Gets serve service")
 }
 
-func (s *GetServeService) GetByServeId(id uint) (data interfaces.ServeResponse, err error){
+func (s *GetServeService) GetByServeId(id int) (data interfaces.ServeResponse, err error){
 	repsponse, err := s.repo.GetByServeId(id)
 	if err != nil {
 		return data, err
@@ -37,8 +37,12 @@ func (s *GetServeService) GetByServeId(id uint) (data interfaces.ServeResponse, 
 	data.UserId = repsponse.UserId
 	return data,nil
 }
-func (s *GetServeService) GetByUserId(id uint) error{
-	return errors.New("Not yet implement at GetByUserId serve service")
+func (s *GetServeService) GetByUserId(id int) (data []interfaces.ServeResponse, err error){
+	dataFormat, err := s.repo.GetByUserId(id)
+	if err != nil {
+		return data, err
+	}
+	return dataFormat, nil
 }
 func (s *GetServeService) GetByServeName(name string) error{
 	return errors.New("Not yet implement at GetByServeName serve service")

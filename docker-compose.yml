@@ -1,0 +1,55 @@
+version: "3.1"
+
+services:
+  # sqldb:
+  #   image: mysql
+  #   container_name: fundamental_mysql
+  #   # NOTE: use of "mysql_native_password" is not recommended: https://dev.mysql.com/doc/refman/8.0/en/upgrading-from-previous-series.html#upgrade-caching-sha2-password
+  #   # (this is just an example, not intended to be a production configuration)
+  #   command: --default-authentication-plugin=mysql_native_password
+  #   environment:
+  #     MYSQL_DATABASE: fundamental_mysql
+  #     MYSQL_USER: admin
+  #     MYSQL_PASSWORD: admin_password
+  #     MYSQL_ROOT_PASSWORD: admin_password
+  #   ports:
+  #     - "5432:5432"
+  #   volumes:
+  #     - mysql_data:/var/lib/mysql
+  #   restart: always
+
+  # sqlhelper:
+  #   image: adminer
+  #   restart: always
+  #   depends_on:
+  #     - sqldb
+  #   ports:
+  #     - 8080:8080
+  db:
+    image: postgres
+    container_name: fundamental_postgres
+    environment:
+      POSTGRES_DB: fundamental_postgres
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+
+  db_helper:
+    image: dpage/pgadmin4
+    container_name: fundamental_pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - db
+    restart: always
+
+volumes:
+  postgres_data:
+  mysql_data:
