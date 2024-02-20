@@ -40,12 +40,12 @@ func SetUpRouter() *fiber.App{
 }
 
 func SetUpdatabase() (*gorm.DB,error){
-	host := os.Getenv("HOST")
-	port, err := strconv.Atoi(os.Getenv("PORT"))
+	host := os.Getenv("DB_HOST")
+	port, err := strconv.Atoi(os.Getenv("DB_PORT"))
 	if err != nil {
 		fmt.Print("Port is should be number")
 	}
-	database := os.Getenv("DATABASE")
+	database := os.Getenv("DB_NAME")
 	username := os.Getenv("DB_USERNAME")
 	password := os.Getenv("DB_PASSWORD")
 	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable" ,host,port,username,password,database)

@@ -27,9 +27,9 @@ services:
   #     - 8080:8080
   db:
     image: postgres
-    container_name: fundamental_postgres
+    container_name: reservation_database
     environment:
-      POSTGRES_DB: fundamental_postgres
+      POSTGRES_DB: reservation
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin_password
     ports:
@@ -46,6 +46,21 @@ services:
       PGADMIN_DEFAULT_PASSWORD: admin
     ports:
       - "5050:80"
+    depends_on:
+      - db
+    restart: always
+
+  reservation-api:
+    build: .
+    ports:
+      - "7777:8000"
+    environment:
+      - SECRET_KEY=test
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=reservation
+      - DB_USERNAME=admin
+      - DB_PASSWORD=admin_password
     depends_on:
       - db
     restart: always
